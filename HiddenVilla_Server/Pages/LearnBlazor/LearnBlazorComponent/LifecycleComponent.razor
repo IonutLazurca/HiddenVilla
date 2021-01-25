@@ -1,0 +1,31 @@
+﻿
+<h3>Lifecycle child component</h3>
+
+<h3>Count value received from parent component is: @CountValue</h3>
+
+<hr />
+
+@foreach (var item in EventType)
+{
+    @item
+    <hr />
+}
+
+@code
+{
+    [Parameter]
+    public int CountValue { get; set; }
+    List<string> EventType = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        EventType.Add("Child - OnInitialised is called");
+    }
+
+    protected override void OnParametersSet()
+    {
+        EventType.Add("Child - OnParameterSet is called");
+    }
+
+
+}

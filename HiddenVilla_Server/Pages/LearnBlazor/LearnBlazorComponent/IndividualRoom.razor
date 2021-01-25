@@ -1,0 +1,59 @@
+﻿@using HiddenVilla_Server.Model
+
+
+<div class="bg-light border p-2 col-5 offset-1">
+    <h1 class="text-secondary">Room - @Room.Id</h1>
+
+    <input type="checkbox" @onchange="RoomCheckBoxSelectedChanged" />
+
+    @Room.RoomName <br />
+    $@Room.Price.ToString("0.00") <br />
+    <input type="checkbox" @bind-value="@Room.IsActive" checked="@(Room.IsActive? "checked":null)" /> Is Active
+    <br />
+    <span>This room is: @(Room.IsActive? "Active": "Inactive")</span>
+    @if (Room.IsActive)
+    {
+        @foreach (var prop in Room.RoomProps)
+        {
+            <p>@prop.Name - @prop.Value</p>
+        }
+    }
+
+    <div class="row container">
+        <button class="btn btn-danger" @onclick="(args)=> SendDeleteSignal(args, Room.Id)">Delete</button>
+        <button class="btn btn-primary">Edit</button>
+    </div>    
+
+    @*<div class="row container">
+        <EditDeleteButton onDeleteButton="SignalId" IsAdmin="true" ></EditDeleteButton>
+    </div>*@
+
+</div>
+
+
+@code {
+    [Parameter]
+    public BlazorRoom Room { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnRoomCheckBoxSelection { get; set; }
+    [Parameter]
+    public EventCallback<int> SignalId { get; set; }
+
+    protected async Task RoomCheckBoxSelectedChanged(ChangeEventArgs e)
+    {
+        await OnRoomCheckBoxSelection.InvokeAsync((bool)e.Value);
+    }
+
+    protected async Task SendDeleteSignal(MouseEventArgs e, int id)
+    {
+        await SignalId.InvokeAsync(id);
+    }
+
+    protected async Task SendFromChildSignal(int id)
+    {
+        await SignalId.InvokeAsync(id);
+    }
+
+
+
+}

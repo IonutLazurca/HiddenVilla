@@ -1,0 +1,46 @@
+﻿@inject IJSRuntime JsRuntime
+
+<div>
+    <div class="alert alert-info">@Title</div>
+
+    <div class="alert alert-success">
+        @if (ChildContent1 == null)
+        {
+            <span>Hello from Empty Render Fragment</span>
+        }
+        else
+        {
+            <span>@ChildContent1</span>
+            <hr />
+            <span>@ChildContent2</span>
+        }
+    </div>
+        <button class="btn btn-danger" @onclick="OnClickBtnMethod">Button rendered in child component</button>
+    <GrandChildComponent></GrandChildComponent>
+</div>
+
+
+
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent1 { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent2 { get; set; }
+
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickBtnMethod { get; set; }
+
+    public async Task ShowToastrSuccess()
+    {
+        await JsRuntime.ToastrSuccess("Woohoo! Success is on the way!");
+    }
+
+
+}

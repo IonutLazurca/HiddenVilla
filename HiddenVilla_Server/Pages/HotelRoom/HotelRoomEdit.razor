@@ -1,0 +1,79 @@
+﻿@page "/hotel-room/edit/firstmode/{idparameter}"
+@using Models
+@using Business.Repository.IRepository
+@inject IHotelRoomRepository HotelRoomRepository
+@inject NavigationManager NavigationManager
+
+<div class="col col-md-6">
+
+    <div class="row mt-2 mb-5">
+        <h3 class="card-title text-info mb-3 ml-3">@Title Hotel Room</h3>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm Model="HotelRoomModel" OnSubmit="UpdateRoomHotel">
+                        <DataAnnotationsValidator />
+                        @*<ValidationSummary />*@
+                        <div class="form-group">
+                            <label>Name</label>
+                            <InputText @bind-Value="HotelRoomModel.Name" class="form-control"></InputText>
+                            <ValidationMessage For="()=>HotelRoomModel.Name"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label>Occupancy</label>
+                            <InputNumber @bind-Value="HotelRoomModel.Occupancy" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>HotelRoomModel.Occupancy"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label>Rate</label>
+                            <InputNumber @bind-Value="HotelRoomModel.RegularRate" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>HotelRoomModel.RegularRate"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label>Sq ft.</label>
+                            <InputText @bind-Value="HotelRoomModel.SqFt" class="form-control"></InputText>
+                            <ValidationMessage For="()=>HotelRoomModel.SqFt"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <InputTextArea @bind-Value="HotelRoomModel.Details" class="form-control"></InputTextArea>
+                            <ValidationMessage For="()=>HotelRoomModel.Details"></ValidationMessage>
+                        </div>                        
+                            <input type="submit" class="btn btn-primary" value="Update Room" />
+                            <NavLink href="hotel-room" class="btn btn-secondary">Back to Room List</NavLink>              
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private HotelRoomDto HotelRoomModel { get; set; } = new HotelRoomDto();
+    public string Title { get; set; } = "Edit";
+
+    [Parameter]
+    public string IdParameter { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        HotelRoomModel = await HotelRoomRepository.GetHotelRoomById(Convert.ToInt32(IdParameter));
+    }
+
+
+
+    private async Task UpdateRoomHotel()
+    {
+        //var roomDetailsByName = await HotelRoomRepository.IsRoomUnique(HotelRoomModel.Name);
+        //if (roomDetailsByName != null)
+        //{
+        //    //there is a duplicated name in the database
+        //    return;
+        //}
+        await HotelRoomRepository.UpdateHotelRoom(Convert.ToInt32(IdParameter), HotelRoomModel);
+
+        NavigationManager.NavigateTo("hotel-room");
+    }
+
+}

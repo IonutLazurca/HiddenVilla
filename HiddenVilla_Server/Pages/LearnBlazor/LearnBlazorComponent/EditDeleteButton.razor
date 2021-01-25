@@ -1,0 +1,24 @@
+﻿@using HiddenVilla_Server.Model
+
+@if (IsAdmin)
+{
+    <button class="btn btn-danger" @onclick="SendDeleteSignal">Delete</button>
+    <button class="btn btn-primary">Edit</button>
+}
+
+
+@code{ 
+
+    [Parameter]
+    public bool IsAdmin { get; set; }
+    [Parameter]
+    public EventCallback onDeleteButton { get; set; }
+
+    protected async Task SendDeleteSignal(MouseEventArgs e)
+    {
+        await onDeleteButton.InvokeAsync(e);
+    }
+
+
+
+}

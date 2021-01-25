@@ -1,0 +1,39 @@
+﻿@page "/parentcomponent"
+
+
+<h1 class="text-danger">Parent child component</h1>
+
+<CascadingValue Value="@MessageForGrandChild" Name="MessageFromGrandParent">
+    <CascadingValue Value="@LuckyNumber" Name="LuckyNumberFromGrandParent" >
+        <ChildComponent @ref="childComp"
+                        OnClickBtnMethod="ShowMessage"
+                        Title="This title is second passed as parameter from Parent Component">
+            <ChildContent1>Render fragment from Parent! WooHoo</ChildContent1>
+            <ChildContent2>Render fragment ChildContent2</ChildContent2>
+        </ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+
+
+<div >
+    <p>Text is @TextMessage</p>
+</div>
+
+<AnotherChildComponent placeholder="Placeholder default"></AnotherChildComponent>
+<div class="row">
+    <button class="btn btn-success" @onclick="()=>childComp.ShowToastrSuccess()">Show Alert</button>
+</div>
+
+@code {
+    private ChildComponent childComp;
+    private string MessageForGrandChild { get; set; } = "Message sent directly to GrandChild Component";
+    public int LuckyNumber { get; set; } = 7;
+
+    public string TextMessage { get; set; } = "";
+
+
+    private void ShowMessage()
+    {
+        TextMessage = "Blazzing text from parent";
+    }
+}
